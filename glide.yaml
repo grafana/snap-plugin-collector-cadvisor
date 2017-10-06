@@ -1,0 +1,21 @@
+package: github.com/grafana/snap-plugin-collector-cadvisor
+import:
+- package: github.com/google/cadvisor
+  version: v0.27.1
+  subpackages:
+  - cache/memory
+  - container
+  - info
+  - manager
+  - utils/sysfs
+- package: github.com/intelsdi-x/snap-plugin-lib-go
+  version: update-logrus-import-path
+  repo: git@github.com:jtlisi/snap-plugin-lib-go.git
+  subpackages:
+  - v1/plugin
+- package: github.com/coreos/rkt
+  version: master
+- package: google.golang.org/grpc
+  version: v1.6.x
+- package: golang.org/x/net
+  version: ab5485076ff3407ad2d02db054635913f017b0ed

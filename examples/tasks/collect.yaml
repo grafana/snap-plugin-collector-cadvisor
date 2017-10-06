@@ -1,0 +1,8 @@
+---
+  version: 1
+  schedule:
+    type: "streaming"
+  workflow:
+    collect:
+      metrics:
+        /grafanalabs/cadvisor/*: {}

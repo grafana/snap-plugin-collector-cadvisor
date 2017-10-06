@@ -1,0 +1,5 @@
+name: cadvisor
+type: collector
+maintainer: grafanalabs
+license: Apache-2.0
+description: "run and streams metrics from an internal cadvisor with kubernetes labels"

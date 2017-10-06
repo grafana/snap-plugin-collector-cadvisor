@@ -1,0 +1,269 @@
+hash: 98c151619cf182c769a3dcb63e7a467016776f2708eee08e3c0715003e64714f
+updated: 2017-10-06T15:05:42.808229574-04:00
+imports:
+- name: cloud.google.com/go
+  version: 3b1ae45394a234c385be014e9a488f2bb6eef821
+  subpackages:
+  - compute/metadata
+  - internal
+- name: github.com/aws/aws-sdk-go
+  version: 63ce630574a5ec05ecd8e8de5cea16332a5a684d
+  subpackages:
+  - aws
+  - aws/awserr
+  - aws/awsutil
+  - aws/client
+  - aws/client/metadata
+  - aws/corehandlers
+  - aws/credentials
+  - aws/credentials/ec2rolecreds
+  - aws/credentials/endpointcreds
+  - aws/credentials/stscreds
+  - aws/defaults
+  - aws/ec2metadata
+  - aws/endpoints
+  - aws/request
+  - aws/session
+  - aws/signer/v4
+  - private/protocol
+  - private/protocol/query
+  - private/protocol/query/queryutil
+  - private/protocol/rest
+  - private/protocol/xml/xmlutil
+  - service/sts
+- name: github.com/blang/semver
+  version: aea32c919a18e5ef4537bbd283ff29594b1b0165
+- name: github.com/coreos/go-systemd
+  version: 4484981625c1a6a2ecb40a390fcb6a9bcfee76e3
+  subpackages:
+  - dbus
+  - util
+- name: github.com/coreos/pkg
+  version: 7f080b6c11ac2d2347c3cd7521e810207ea1a041
+  subpackages:
+  - dlopen
+- name: github.com/coreos/rkt
+  version: 51659354607aebad1d75411c9dbbd9e02cfa5fce
+  subpackages:
+  - api/v1alpha
+- name: github.com/docker/distribution
+  version: edc3ab29cdff8694dd6feb85cfeb4b5f1b38ed9c
+  subpackages:
+  - digestset
+  - reference
+- name: github.com/docker/docker
+  version: 8af4db6f002ac907b6ef8610b237879dfcaa5b7a
+  subpackages:
+  - pkg/longpath
+  - pkg/mount
+  - pkg/symlink
+  - pkg/system
+- name: github.com/docker/engine-api
+  version: 87b3df23dcba0ce02bfe0474e29a08a97f7814e6
+  subpackages:
+  - client
+  - client/transport
+  - client/transport/cancellable
+  - types
+  - types/blkiodev
+  - types/container
+  - types/filters
+  - types/network
+  - types/reference
+  - types/registry
+  - types/strslice
+  - types/time
+  - types/versions
+- name: github.com/docker/go-connections
+  version: 3ede32e2033de7505e6500d6c868c2b9ed9f169d
+  subpackages:
+  - nat
+  - sockets
+  - tlsconfig
+- name: github.com/docker/go-units
+  version: 0bbddae09c5a5419a8c6dcdd7ff90da3d450393b
+- name: github.com/euank/go-kmsg-parser
+  version: 5ba4d492e455a77d25dcf0d2c4acc9f2afebef4e
+  subpackages:
+  - kmsgparser
+- name: github.com/go-ini/ini
+  version: 193d1ecb466bf97aae8b454a5cfc192941c64809
+- name: github.com/godbus/dbus
+  version: c7fdd8b5cd55e87b4e1f4e372cdb1db61dd6c66f
+- name: github.com/golang/glog
+  version: fca8c8854093a154ff1eb580aae10276ad6b1b5f
+- name: github.com/golang/protobuf
+  version: ab9f9a6dab164b7d1246e0e688b0ab7b94d8553e
+  subpackages:
+  - proto
+  - ptypes
+  - ptypes/any
+  - ptypes/duration
+  - ptypes/timestamp
+- name: github.com/google/cadvisor
+  version: cda62a43857256fbc95dd31e7c810888f00f8ec7
+  subpackages:
+  - cache/memory
+  - collector
+  - container
+  - container/common
+  - container/crio
+  - container/docker
+  - container/libcontainer
+  - container/raw
+  - container/rkt
+  - container/systemd
+  - devicemapper
+  - events
+  - fs
+  - info
+  - info/v1
+  - info/v2
+  - machine
+  - manager
+  - manager/watcher
+  - manager/watcher/raw
+  - manager/watcher/rkt
+  - storage
+  - summary
+  - utils
+  - utils/cloudinfo
+  - utils/cpuload
+  - utils/cpuload/netlink
+  - utils/docker
+  - utils/oomparser
+  - utils/sysfs
+  - utils/sysinfo
+  - version
+  - zfs
+- name: github.com/intelsdi-x/snap-plugin-lib-go
+  version: f2a5d5384da1094c1e582063d07c8413b534fcb7
+  repo: git@github.com:jtlisi/snap-plugin-lib-go.git
+  subpackages:
+  - v1/plugin
+  - v1/plugin/rpc
+- name: github.com/jmespath/go-jmespath
+  version: 0b12d6b521d83fc7f755e7cfc1b1fbdd35a01a74
+- name: github.com/julienschmidt/httprouter
+  version: 8c199fb6259ffc1af525cc3ad52ee60ba8359669
+- name: github.com/matttproud/golang_protobuf_extensions
+  version: fc2b8d3a73c4867e51861bbdd5ae3c1f0869dd6a
+  subpackages:
+  - pbutil
+- name: github.com/Microsoft/go-winio
+  version: 862b6557927a5c5c81e411c12aa6de7e566cbb7a
+- name: github.com/mistifyio/go-zfs
+  version: 1b4ae6fb4e77b095934d4430860ff202060169f8
+- name: github.com/mrunalp/fileutils
+  version: 4ee1cc9a80582a0c75febdd5cfa779ee4361cbca
+- name: github.com/opencontainers/go-digest
+  version: 279bed98673dd5bef374d3b6e4b09e2af76183bf
+- name: github.com/opencontainers/runc
+  version: 4d6e6720a7c885c37b4cb083c0d372dda3425120
+  subpackages:
+  - libcontainer
+  - libcontainer/apparmor
+  - libcontainer/cgroups
+  - libcontainer/cgroups/fs
+  - libcontainer/cgroups/rootless
+  - libcontainer/cgroups/systemd
+  - libcontainer/configs
+  - libcontainer/configs/validate
+  - libcontainer/criurpc
+  - libcontainer/keys
+  - libcontainer/seccomp
+  - libcontainer/stacktrace
+  - libcontainer/system
+  - libcontainer/user
+  - libcontainer/utils
+- name: github.com/opencontainers/runtime-spec
+  version: f2276206b32ad0c2478bfc6440ceb7d51d815cf8
+  subpackages:
+  - specs-go
+- name: github.com/opencontainers/selinux
+  version: 4a2974bf1ee960774ffd517717f1f45325af0206
+  subpackages:
+  - go-selinux
+  - go-selinux/label
+- name: github.com/pborman/uuid
+  version: cccd189d45f7ac3368a0d127efb7f4d08ae0b655
+- name: github.com/pkg/errors
+  version: c605e284fe17294bda444b34710735b29d1a9d90
+- name: github.com/prometheus/client_model
+  version: 6f3806018612930941127f2a7c6c453ba2c527d2
+  subpackages:
+  - go
+- name: github.com/prometheus/common
+  version: 49fee292b27bfff7f354ee0f64e1bc4850462edf
+  subpackages:
+  - expfmt
+  - internal/bitbucket.org/ww/goautoneg
+  - model
+- name: github.com/seccomp/libseccomp-golang
+  version: 1b506fc7c24eec5a3693cdcbed40d9c226cfc6a1
+- name: github.com/sirupsen/logrus
+  version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
+- name: github.com/syndtr/gocapability
+  version: e7cb7fa329f456b3855136a2642b197bad7366ba
+  subpackages:
+  - capability
+- name: github.com/urfave/cli
+  version: cfb38830724cc34fedffe9a2a29fb54fa9169cd1
+- name: github.com/vishvananda/netlink
+  version: 1e2e08e8a2dcdacaae3f14ac44c5cfa31361f270
+  subpackages:
+  - nl
+- name: golang.org/x/crypto
+  version: eb71ad9bd329b5ac0fd0148dd99bd62e8be8e035
+  subpackages:
+  - ssh/terminal
+- name: golang.org/x/exp
+  version: 292a51b8d262487dab23a588950e8052d63d9113
+  subpackages:
+  - inotify
+- name: golang.org/x/net
+  version: ab5485076ff3407ad2d02db054635913f017b0ed
+  subpackages:
+  - context
+  - context/ctxhttp
+  - http2
+  - http2/hpack
+  - idna
+  - internal/timeseries
+  - lex/httplex
+  - proxy
+  - trace
+- name: golang.org/x/sys
+  version: 22e23b74325bf60e4cc1ce7bdc157eda0d8b5c13
+  subpackages:
+  - unix
+  - windows
+- name: golang.org/x/text
+  version: 3bd178b88a8180be2df394a1fbb81313916f0e7b
+  subpackages:
+  - secure/bidirule
+  - transform
+  - unicode/bidi
+  - unicode/norm
+- name: google.golang.org/genproto
+  version: b0a3dcfcd1a9bd48e63634bd8802960804cf8315
+  subpackages:
+  - googleapis/rpc/status
+- name: google.golang.org/grpc
+  version: 84671c5e11bfb5b7c237ff1799a660ff11a518d2
+  subpackages:
+  - codes
+  - connectivity
+  - credentials
+  - grpclb/grpc_lb_v1/messages
+  - grpclog
+  - internal
+  - keepalive
+  - metadata
+  - naming
+  - peer
+  - stats
+  - status
+  - tap
+  - transport
+testImports: []
