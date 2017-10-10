@@ -66,7 +66,7 @@ func (m *Manifest) buildMetricsList(metrics []plugin.Metric) time.Duration {
 			continue
 		}
 		if mtx.Namespace.Element(6).Value == "diskio" {
-			m.diskIoMetrics = append(m.diskIoMetrics, mtx.Namespace.Element(7).Value)
+			m.diskIoMetrics = append(m.diskIoMetrics, mtx.Namespace.Element(8).Value)
 			continue
 		}
 		log.Printf("metric %v not found but requested\n", mtx.Namespace.String())

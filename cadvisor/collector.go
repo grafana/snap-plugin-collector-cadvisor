@@ -149,7 +149,7 @@ func (c *Collector) StreamMetrics(ctx context.Context, mtxIn chan []plugin.Metri
 				for _, key := range c.manifest.ifaceMetrics {
 					m, ok := ifaceMap[key]
 					if !ok {
-						log.Printf("metric: %v does not exist in the tcp6 metric map\n", key)
+						log.Printf("metric: %v does not exist in the iface metric map\n", key)
 						continue
 					}
 					for _, iface := range cont.Stats[0].Network.Interfaces {
@@ -212,6 +212,82 @@ func (c *Collector) StreamMetrics(ctx context.Context, mtxIn chan []plugin.Metri
 						Data:        m.Data(cont.Stats[0]),
 						Timestamp:   cont.Stats[0].Timestamp,
 					})
+				}
+			}
+
+			if cont.Spec.HasDiskIo {
+				for _, key := range c.manifest.diskIoMetrics {
+					m, ok := diskIoMap[key]
+					if !ok {
+						log.Printf("metric: %v does not exist in the fs metric map\n", key)
+						continue
+					}
+					if key == "write_bytes" || key == "read_bytes" {
+						for _, disk := range cont.Stats[0].DiskIo.IoServiceBytes {
+							metrics = append(metrics, plugin.Metric{
+								Namespace:   m.Namespace(contInfo[0], contInfo[1], contInfo[2], disk.Device),
+								Description: m.Description,
+								Unit:        m.Unit,
+								Data:        m.Data(disk),
+								Timestamp:   cont.Stats[0].Timestamp,
+							})
+						}
+					}
+					if key == "writes" || key == "reads" {
+						for _, disk := range cont.Stats[0].DiskIo.IoServiced {
+							metrics = append(metrics, plugin.Metric{
+								Namespace:   m.Namespace(contInfo[0], contInfo[1], contInfo[2], disk.Device),
+								Description: m.Description,
+								Unit:        m.Unit,
+								Data:        m.Data(disk),
+								Timestamp:   cont.Stats[0].Timestamp,
+							})
+						}
+					}
+					if key == "queued_writes" || key == "queued_reads" {
+						for _, disk := range cont.Stats[0].DiskIo.IoQueued {
+							metrics = append(metrics, plugin.Metric{
+								Namespace:   m.Namespace(contInfo[0], contInfo[1], contInfo[2], disk.Device),
+								Description: m.Description,
+								Unit:        m.Unit,
+								Data:        m.Data(disk),
+								Timestamp:   cont.Stats[0].Timestamp,
+							})
+						}
+					}
+					if key == "sector_writes" || key == "sector_reads" {
+						for _, disk := range cont.Stats[0].DiskIo.Sectors {
+							metrics = append(metrics, plugin.Metric{
+								Namespace:   m.Namespace(contInfo[0], contInfo[1], contInfo[2], disk.Device),
+								Description: m.Description,
+								Unit:        m.Unit,
+								Data:        m.Data(disk),
+								Timestamp:   cont.Stats[0].Timestamp,
+							})
+						}
+					}
+					if key == "merged_writes" || key == "merged_reads" {
+						for _, disk := range cont.Stats[0].DiskIo.IoMerged {
+							metrics = append(metrics, plugin.Metric{
+								Namespace:   m.Namespace(contInfo[0], contInfo[1], contInfo[2], disk.Device),
+								Description: m.Description,
+								Unit:        m.Unit,
+								Data:        m.Data(disk),
+								Timestamp:   cont.Stats[0].Timestamp,
+							})
+						}
+					}
+					if key == "write_time" || key == "read_time" {
+						for _, disk := range cont.Stats[0].DiskIo.IoServiceTime {
+							metrics = append(metrics, plugin.Metric{
+								Namespace:   m.Namespace(contInfo[0], contInfo[1], contInfo[2], disk.Device),
+								Description: m.Description,
+								Unit:        m.Unit,
+								Data:        m.Data(disk),
+								Timestamp:   cont.Stats[0].Timestamp,
+							})
+						}
+					}
 				}
 			}
 		}
@@ -295,6 +371,16 @@ func (c Collector) GetMetricTypes(cfg plugin.Config) ([]plugin.Metric, error) {
 			Config:      cfg,
 		})
 	}
+
+	for _, m := range diskIoMap {
+		metrics = append(metrics, plugin.Metric{
+			Namespace:   m.Namespace("*", "*", "*", "*"),
+			Description: m.Description,
+			Unit:        m.Unit,
+			Config:      cfg,
+		})
+	}
+
 	return metrics, nil
 }
 

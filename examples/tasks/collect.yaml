@@ -5,4 +5,4 @@
   workflow:
     collect:
       metrics:
-        /grafanalabs/cadvisor/*: {}
+        /grafanalabs/cadvisor/container/*/*/*/diskio/*: {}

@@ -1,8 +1,6 @@
 package cadvisor
 
 import (
-	"time"
-
 	"github.com/google/cadvisor/info/v1"
 	info "github.com/google/cadvisor/info/v2"
 	"github.com/intelsdi-x/snap-plugin-lib-go/v1/plugin"
@@ -24,6 +22,15 @@ type IfaceMetric struct {
 	Unit        string
 	Tags        map[string]string
 	Data        func(s v1.InterfaceStats) interface{}
+}
+
+// DiskIoMetric type to translate v1.InterfaceStats into a snap Metric
+type DiskIoMetric struct {
+	Namespace   func(ns string, pn string, cn string, name string) plugin.Namespace
+	Description string
+	Unit        string
+	Tags        map[string]string
+	Data        func(s v1.PerDiskStats) interface{}
 }
 
 func containerNamespace(ns string, pn string, cn string) plugin.Namespace {
@@ -58,30 +65,30 @@ var (
 			Namespace: func(ns string, pn string, cn string) plugin.Namespace {
 				return containerNamespace(ns, pn, cn).AddStaticElements("cpu", "total", "usage")
 			},
-			Unit:        "s",
+			Unit:        "ns",
 			Description: "total CPU usage",
 			Data: func(s *info.ContainerStats) interface{} {
-				return float64(s.Cpu.Usage.Total) / float64(time.Second)
+				return s.Cpu.Usage.Total
 			},
 		},
 		"user": Metric{
 			Namespace: func(ns string, pn string, cn string) plugin.Namespace {
 				return containerNamespace(ns, pn, cn).AddStaticElements("cpu", "user", "usage")
 			},
-			Unit:        "s",
+			Unit:        "ns",
 			Description: "user CPU usage",
 			Data: func(s *info.ContainerStats) interface{} {
-				return float64(s.Cpu.Usage.User) / float64(time.Second)
+				return s.Cpu.Usage.User
 			},
 		},
 		"system": Metric{
 			Namespace: func(ns string, pn string, cn string) plugin.Namespace {
 				return containerNamespace(ns, pn, cn).AddStaticElements("cpu", "system", "usage")
 			},
-			Unit:        "s",
+			Unit:        "ns",
 			Description: "system CPU usage",
 			Data: func(s *info.ContainerStats) interface{} {
-				return float64(s.Cpu.Usage.System) / float64(time.Second)
+				return s.Cpu.Usage.System
 			},
 		},
 		"load": Metric{
@@ -386,9 +393,9 @@ var (
 	}
 
 	fsMap = map[string]Metric{
-		"totalUsage": Metric{
+		"total_usage": Metric{
 			Namespace: func(ns string, pn string, cn string) plugin.Namespace {
-				return containerNamespace(ns, pn, cn).AddStaticElements("fs", "totalUsage")
+				return containerNamespace(ns, pn, cn).AddStaticElements("fs", "total_usage")
 			},
 			Unit:        "B",
 			Description: "Total Number of bytes consumed by container.",
@@ -396,9 +403,9 @@ var (
 				return *s.Filesystem.TotalUsageBytes
 			},
 		},
-		"baseUsage": Metric{
+		"base_usage": Metric{
 			Namespace: func(ns string, pn string, cn string) plugin.Namespace {
-				return containerNamespace(ns, pn, cn).AddStaticElements("fs", "baseUsage")
+				return containerNamespace(ns, pn, cn).AddStaticElements("fs", "base_usage")
 			},
 			Unit:        "B",
 			Description: "Total Number of bytes consumed by container.",
@@ -406,9 +413,9 @@ var (
 				return *s.Filesystem.BaseUsageBytes
 			},
 		},
-		"inodeUsage": Metric{
+		"inode_usage": Metric{
 			Namespace: func(ns string, pn string, cn string) plugin.Namespace {
-				return containerNamespace(ns, pn, cn).AddStaticElements("fs", "inodeUsage")
+				return containerNamespace(ns, pn, cn).AddStaticElements("fs", "inode_usage")
 			},
 			Unit:        "inodes",
 			Description: "Number of inodes used within the container's root filesystem.",
@@ -418,10 +425,181 @@ var (
 		},
 	}
 
-	ifaceMap = map[string]IfaceMetric{
-		"rx_bytes": IfaceMetric{
+	diskIoMap = map[string]DiskIoMetric{
+		"read_bytes": DiskIoMetric{
 			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
-				metName := containerNamespace(ns, pn, cn).AddStaticElement("iface").AddDynamicElement("device_name", "name of the interface").AddStaticElement("rx_bytes")
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("diskio").AddDynamicElement("device_name", "name of the disk").AddStaticElement("read_bytes")
+				if name != "*" {
+					metName[7].Value = name
+				}
+				return metName
+			},
+			Unit:        "B",
+			Description: "Total Number of bytes read",
+			Data: func(s v1.PerDiskStats) interface{} {
+				return s.Stats["Read"]
+			},
+		},
+		"reads": DiskIoMetric{
+			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("diskio").AddDynamicElement("device_name", "name of the disk").AddStaticElement("reads")
+				if name != "*" {
+					metName[7].Value = name
+				}
+				return metName
+			},
+			Unit:        "event",
+			Description: "Total number of reads completed",
+			Data: func(s v1.PerDiskStats) interface{} {
+				return s.Stats["Read"]
+			},
+		},
+		"queued_reads": DiskIoMetric{
+			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("diskio").AddDynamicElement("device_name", "name of the disk").AddStaticElement("queued_reads")
+				if name != "*" {
+					metName[7].Value = name
+				}
+				return metName
+			},
+			Unit:        "event",
+			Description: "Total Number of reads queued",
+			Data: func(s v1.PerDiskStats) interface{} {
+				return s.Stats["Read"]
+			},
+		},
+		"sector_reads": DiskIoMetric{
+			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("diskio").AddDynamicElement("device_name", "name of the disk").AddStaticElement("sector_reads")
+				if name != "*" {
+					metName[7].Value = name
+				}
+				return metName
+			},
+			Unit:        "event",
+			Description: "Total number of sector reads completed",
+			Data: func(s v1.PerDiskStats) interface{} {
+				return s.Stats["Read"]
+			},
+		},
+		"merged_reads": DiskIoMetric{
+			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("diskio").AddDynamicElement("device_name", "name of the disk").AddStaticElement("merged_reads")
+				if name != "*" {
+					metName[7].Value = name
+				}
+				return metName
+			},
+			Unit:        "event",
+			Description: "Total number of reads merged",
+			Data: func(s v1.PerDiskStats) interface{} {
+				return s.Stats["Read"]
+			},
+		},
+		"read_time": DiskIoMetric{
+			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("diskio").AddDynamicElement("device_name", "name of the disk").AddStaticElement("read_time")
+				if name != "*" {
+					metName[7].Value = name
+				}
+				return metName
+			},
+			Unit:        "ns",
+			Description: "Total number of reads completed",
+			Data: func(s v1.PerDiskStats) interface{} {
+				return s.Stats["Read"]
+			},
+		},
+		"write_bytes": DiskIoMetric{
+			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("diskio").AddDynamicElement("device_name", "name of the disk").AddStaticElement("write_bytes")
+				if name != "*" {
+					metName[7].Value = name
+				}
+				return metName
+			},
+			Unit:        "B",
+			Description: "Total Number of bytes write",
+			Data: func(s v1.PerDiskStats) interface{} {
+				return s.Stats["Write"]
+			},
+		},
+		"writes": DiskIoMetric{
+			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("diskio").AddDynamicElement("device_name", "name of the disk").AddStaticElement("writes")
+				if name != "*" {
+					metName[7].Value = name
+				}
+				return metName
+			},
+			Unit:        "event",
+			Description: "Total number of writes completed",
+			Data: func(s v1.PerDiskStats) interface{} {
+				return s.Stats["Write"]
+			},
+		},
+		"queued_writes": DiskIoMetric{
+			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("diskio").AddDynamicElement("device_name", "name of the disk").AddStaticElement("queued_writes")
+				if name != "*" {
+					metName[7].Value = name
+				}
+				return metName
+			},
+			Unit:        "event",
+			Description: "Total Number of writes queued",
+			Data: func(s v1.PerDiskStats) interface{} {
+				return s.Stats["Write"]
+			},
+		},
+		"sector_writes": DiskIoMetric{
+			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("diskio").AddDynamicElement("device_name", "name of the disk").AddStaticElement("sector_writes")
+				if name != "*" {
+					metName[7].Value = name
+				}
+				return metName
+			},
+			Unit:        "event",
+			Description: "Total number of sector writes completed",
+			Data: func(s v1.PerDiskStats) interface{} {
+				return s.Stats["Write"]
+			},
+		},
+		"merged_writes": DiskIoMetric{
+			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("diskio").AddDynamicElement("device_name", "name of the disk").AddStaticElement("merged_writes")
+				if name != "*" {
+					metName[7].Value = name
+				}
+				return metName
+			},
+			Unit:        "event",
+			Description: "Total number of writes merged",
+			Data: func(s v1.PerDiskStats) interface{} {
+				return s.Stats["Write"]
+			},
+		},
+		"write_time": DiskIoMetric{
+			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("diskio").AddDynamicElement("device_name", "name of the disk").AddStaticElement("write_time")
+				if name != "*" {
+					metName[7].Value = name
+				}
+				return metName
+			},
+			Unit:        "ns",
+			Description: "Total amount of time spent writing",
+			Data: func(s v1.PerDiskStats) interface{} {
+				return s.Stats["Write"]
+			},
+		},
+	}
+
+	ifaceMap = map[string]IfaceMetric{
+		"in_bytes": IfaceMetric{
+			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("iface").AddDynamicElement("device_name", "name of the interface").AddStaticElement("in_bytes")
 				if name != "*" {
 					metName[7].Value = name
 				}
@@ -433,9 +611,9 @@ var (
 				return s.RxBytes
 			},
 		},
-		"rx_packets": IfaceMetric{
+		"in_packets": IfaceMetric{
 			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
-				metName := containerNamespace(ns, pn, cn).AddStaticElement("iface").AddDynamicElement("device_name", "name of the interface").AddStaticElement("rx_packets")
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("iface").AddDynamicElement("device_name", "name of the interface").AddStaticElement("in_packets")
 				if name != "*" {
 					metName[7].Value = name
 				}
@@ -447,9 +625,9 @@ var (
 				return s.RxPackets
 			},
 		},
-		"rx_errors": IfaceMetric{
+		"in_errors": IfaceMetric{
 			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
-				metName := containerNamespace(ns, pn, cn).AddStaticElement("iface").AddDynamicElement("device_name", "name of the interface").AddStaticElement("rx_errors")
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("iface").AddDynamicElement("device_name", "name of the interface").AddStaticElement("in_errors")
 				if name != "*" {
 					metName[7].Value = name
 				}
@@ -461,9 +639,9 @@ var (
 				return s.RxErrors
 			},
 		},
-		"rx_dropped": IfaceMetric{
+		"in_dropped": IfaceMetric{
 			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
-				metName := containerNamespace(ns, pn, cn).AddStaticElement("iface").AddDynamicElement("device_name", "name of the interface").AddStaticElement("rx_dropped")
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("iface").AddDynamicElement("device_name", "name of the interface").AddStaticElement("in_dropped")
 				if name != "*" {
 					metName[7].Value = name
 				}
@@ -475,9 +653,9 @@ var (
 				return s.RxDropped
 			},
 		},
-		"tx_bytes": IfaceMetric{
+		"out_bytes": IfaceMetric{
 			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
-				metName := containerNamespace(ns, pn, cn).AddStaticElement("iface").AddDynamicElement("device_name", "name of the interface").AddStaticElement("tx_bytes")
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("iface").AddDynamicElement("device_name", "name of the interface").AddStaticElement("out_bytes")
 				if name != "*" {
 					metName[7].Value = name
 				}
@@ -489,9 +667,9 @@ var (
 				return s.TxBytes
 			},
 		},
-		"tx_packets": IfaceMetric{
+		"out_packets": IfaceMetric{
 			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
-				metName := containerNamespace(ns, pn, cn).AddStaticElement("iface").AddDynamicElement("device_name", "name of the interface").AddStaticElement("tx_packets")
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("iface").AddDynamicElement("device_name", "name of the interface").AddStaticElement("out_packets")
 				if name != "*" {
 					metName[7].Value = name
 				}
@@ -503,9 +681,9 @@ var (
 				return s.TxPackets
 			},
 		},
-		"tx_errors": IfaceMetric{
+		"out_errors": IfaceMetric{
 			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
-				metName := containerNamespace(ns, pn, cn).AddStaticElement("iface").AddDynamicElement("device_name", "name of the interface").AddStaticElement("tx_errors")
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("iface").AddDynamicElement("device_name", "name of the interface").AddStaticElement("out_errors")
 				if name != "*" {
 					metName[7].Value = name
 				}
@@ -517,9 +695,9 @@ var (
 				return s.TxErrors
 			},
 		},
-		"tx_dropped": IfaceMetric{
+		"out_dropped": IfaceMetric{
 			Namespace: func(ns string, pn string, cn string, name string) plugin.Namespace {
-				metName := containerNamespace(ns, pn, cn).AddStaticElement("iface").AddDynamicElement("device_name", "name of the interface").AddStaticElement("tx_dropped")
+				metName := containerNamespace(ns, pn, cn).AddStaticElement("iface").AddDynamicElement("device_name", "name of the interface").AddStaticElement("out_dropped")
 				if name != "*" {
 					metName[7].Value = name
 				}
