@@ -38,14 +38,6 @@ This builds the plugin in `./build/`
 Available configuration option:
 * interval - this is a streaming plugin that requires a set interval for how often to forward metrics from cadvisors. This is a positive integer
 
-## Documentation
-There are a number of other resources you can review to learn to use this plugin:
-
-* [gocadvisor](https://github.com/shirou/gocadvisor/) (go based implementation)
-* [cadvisor](https://pythonhosted.org/cadvisor/) (python based implementation)
-* [Snap cadvisor integration test](https://github.com/grafana/snap-plugin-collector-cadvisor/blob/master/cadvisor/cadvisor_integration_test.go)
-* [Snap cadvisor unit test](https://github.com/grafana/snap-plugin-collector-cadvisor/blob/master/cadvisor/cadvisor_test.go)
-* [Snap cadvisor examples](#examples)
 
 ### Collected metrics
 List of metrics collected by this plugin can be found in [METRICS.md file](METRICS.md).
