@@ -1,6 +1,7 @@
 # Metrics
 
-prefix: `/grafanalabs/cadvisor/container/<namespace>/<podname>/<container_name>`
+__prefix__: `/grafanalabs/cadvisor/container/<namespace>/<podname>/<container_name>`
+
 | Name                             |
 |----------------------------------|
 | `cpu/load`                       |
