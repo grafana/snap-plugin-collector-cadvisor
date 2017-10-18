@@ -9,8 +9,6 @@ import:
   - manager
   - utils/sysfs
 - package: github.com/intelsdi-x/snap-plugin-lib-go
-  version: update-logrus-import-path
-  repo: git@github.com:jtlisi/snap-plugin-lib-go.git
   subpackages:
   - v1/plugin
 - package: github.com/coreos/rkt

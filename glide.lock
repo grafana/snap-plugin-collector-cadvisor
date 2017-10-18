@@ -1,5 +1,5 @@
-hash: 98c151619cf182c769a3dcb63e7a467016776f2708eee08e3c0715003e64714f
-updated: 2017-10-06T15:05:42.808229574-04:00
+hash: 4dcce80debe16ee221b45fb17e70bf799253c53fb8d9342dddc3d2f8cf858036
+updated: 2017-10-18T11:15:20.52619924-04:00
 imports:
 - name: cloud.google.com/go
   version: 3b1ae45394a234c385be014e9a488f2bb6eef821
@@ -137,8 +137,7 @@ imports:
   - version
   - zfs
 - name: github.com/intelsdi-x/snap-plugin-lib-go
-  version: f2a5d5384da1094c1e582063d07c8413b534fcb7
-  repo: git@github.com:jtlisi/snap-plugin-lib-go.git
+  version: 69934c200c23811291535a804852ff2231bf85f0
   subpackages:
   - v1/plugin
   - v1/plugin/rpc
@@ -239,14 +238,14 @@ imports:
   - unix
   - windows
 - name: golang.org/x/text
-  version: 3bd178b88a8180be2df394a1fbb81313916f0e7b
+  version: cfdf022e86b4ecfb646e1efbd7db175dd623a8fa
   subpackages:
   - secure/bidirule
   - transform
   - unicode/bidi
   - unicode/norm
 - name: google.golang.org/genproto
-  version: b0a3dcfcd1a9bd48e63634bd8802960804cf8315
+  version: 40b7550fd0ba4b8f7e9d70ed40fcd4f3375db1de
   subpackages:
   - googleapis/rpc/status
 - name: google.golang.org/grpc
